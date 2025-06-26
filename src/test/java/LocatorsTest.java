@@ -56,7 +56,7 @@ public class LocatorsTest {
     }
 
     @Test
-    public static void Tests() {
+    public static void check_inventory_items_in_cart() {
         //Настройка драйвера
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> chromePrefs = new HashMap<>();
