@@ -3,14 +3,15 @@ package tests;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.*;
 
 import java.time.Duration;
 import java.util.HashMap;
-
+import org.junit.jupiter.api.DisplayName;
+//@Listeners (TestListener.class)
 public class BaseTest {
 
     static WebDriver driver;
@@ -21,8 +22,10 @@ public class BaseTest {
     CartPage cartPage;
     CheckoutPage checkoutPage;
 
+    @Parameters({"browser"})
     @BeforeMethod
-    public void setup(){
+    public void setup(@Optional("chrome") String browser){
+    if(browser.equalsIgnoreCase("chrome")){
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("credentials_enable_service", false);
@@ -32,8 +35,13 @@ public class BaseTest {
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-infobars");
-        softAssert = new SoftAssert();
         driver = new ChromeDriver(options);
+    }
+    else if (browser.equalsIgnoreCase("edge")){
+        driver = new EdgeDriver();
+    }
+
+        softAssert = new SoftAssert();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver,softAssert);
