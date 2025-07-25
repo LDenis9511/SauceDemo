@@ -1,114 +1,35 @@
 package pages;
 
+import dto.Product;
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.testng.asserts.SoftAssert;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
+@Log4j2
 public class CartPage extends BasePage{
 
-    private final By CARTLIST = By.cssSelector(".cart_list");
-    private final By ELEMENTNAME = By.cssSelector(".inventory_item_name ");
-    private final By ELEMENTPRICE = By.cssSelector(".inventory_item_price ");
-    private final By BUTTON = By.cssSelector("button");
     private final By CHECKOUT = By.cssSelector("#checkout");
-    private final By SHOPPING = By.cssSelector("#continue-shopping");
+    private final String ELEMENTNAME = "//div[text()='%s']";
+    private final String ELEMENTPRICE = "//div[text()='Sauce Labs Backpack']/ancestor::div[@class='cart_item']//div[@class='inventory_item_price']";
+    private final String BUTTON = "//div[text()='%s']/ancestor::div[@class='inventory_item']//button";
 
-    public CartPage(WebDriver driver, SoftAssert softAssert) {
-        super(driver,softAssert);
+    public CartPage(WebDriver driver) {
+        super(driver);
     }
 
-    public void open(){
+    public CartPage open(){
+        log.info("Открытие корзины");
         driver.get(BASE_URL+"cart.html");
+        return this;
     }
 
-    public void CheckItemsAndPriceInCart(HashMap<String, String> ItemsAndPtice){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            String itemincart = element.findElement(ELEMENTNAME).getText();
-            if (ItemsAndPtice.containsKey(itemincart)) {
-                //Проверяем цену товара
-                softAssert.assertEquals(element.findElement(ELEMENTPRICE).getText(), ItemsAndPtice.get(itemincart));
-            }
-        }
-    }
-
-    public void CheckItemsInCart(Set<String> Item){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            String itemincart = element.findElement(ELEMENTNAME).getText();
-            //Проверяем наличие карточки в корзине по названию
-            softAssert.assertTrue(Item.contains(itemincart));
-        }
-    }
-
-    public void CheckItemsAndPriceInCart(String item, String price){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            String itemincart = element.findElement(ELEMENTNAME).getText();
-            //Проверяем наличие карточки в корзине по названию
-            softAssert.assertTrue(item.contains(itemincart));
-            //Проверяем цену товара
-            softAssert.assertEquals(element.findElement(ELEMENTPRICE).getText(),price);
-        }
-    }
-
-    public void CheckItemsInCart(String item){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        String qqq = null;
-        for (WebElement element : elements) {
-            String itemincart = element.findElement(ELEMENTNAME).getText();
-            if(item.equals(itemincart)) qqq= itemincart;
-        }
-        softAssert.assertEquals(qqq,item,"Данный товар отсутствует");
-    }
-
-    public void CheckItemsNotInCart(String item){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        String qqq = null;
-        for (WebElement element : elements) {
-            String itemincart = element.findElement(ELEMENTNAME).getText();
-            if(item.equals(itemincart)) qqq= itemincart;
-        }
-        softAssert.assertNotEquals(qqq,item,"Данный товар есть в корзине");
-    }
-
-    public void RemoveAllItems(){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            element.findElement(BUTTON).click();
-        }
-    }
-
-    public void RemoveItems(Set<String> Item){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            String text = element.findElement(ELEMENTNAME).getText();
-            if (Item.contains(text)) {
-                element.findElement(BUTTON).click();
-            }
-        }
-    }
-
-    public void RemoveItems(String Item){
-        List<WebElement> elements = driver.findElements(CARTLIST);
-        for (WebElement element : elements) {
-            String text = element.findElement(ELEMENTNAME).getText();
-            if (Item.equals(text)) {
-                element.findElement(BUTTON).click();
-            }
-        }
-    }
-
-    public void clickCheckout(){
+    public CheckoutPage clickCheckout(){
+        log.info("Нажатие кнопки 'CHECKOUT'");
         driver.findElement(CHECKOUT).click();
+        return new CheckoutPage(driver);
     }
 
-    public void clickShopping(){
-        driver.findElement(SHOPPING).click();
+    public String getProductPrise(Product product){
+        log.info("получение цены: {}",product.getProductName());
+    return driver.findElement(By.xpath(String.format(ELEMENTPRICE,product.getProductName()))).getText();
     }
 }

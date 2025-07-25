@@ -1,7 +1,10 @@
 package tests;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
+
+import dto.User;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -16,37 +19,13 @@ import static org.testng.Assert.assertTrue;
 
 public class LoginTest extends BaseTest{
 
-    @Test (enabled = false ,groups = {"checkLogin"})
-    public void checkLoginWithoutPassword(){
-        loginPage.open();
-        loginPage.login("standard_user","");
-        Assert.assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Password is required",
-                "Сообщение не то ");
-    }
+    User user = new User();
 
-    @Test (enabled = false ,groups = {"checkLogin"})
-    public void checkLoginWithoutUsername(){
-        loginPage.open();
-        loginPage.login("","secret_sauce");
-        Assert.assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Username is required",
-                "Сообщение не то ");
-    }
-
-    @Test (enabled = false ,groups = {"checkLogin"})
-    public void checkLoginWithNegativeValue(){
-        loginPage.open();
-        loginPage.login("test","test");
-        Assert.assertEquals(loginPage.getErrorMessage(),
-                "Epic sadface: Username and password do not match any user in this service",
-                "Сообщение не то ");
-    }
-
-    @Test (testName = "Авторизация")
+    @Test (testName = "Авторизация",description = "Проверка  авторизация с корректными данными")
+    @Severity(SeverityLevel.BLOCKER)
+    @Owner("Laptev D.Y.")
     public void checkLogin(){
-        loginPage.open();
-        loginPage.login("standard_user","secret_sauce");
+        loginStep.auth(user);
         assertTrue(productsPage.isPageOpened(),"Не авторизовались");
     }
 
@@ -59,10 +38,15 @@ public class LoginTest extends BaseTest{
         };
     }
 
-    @Test (dataProvider = "LoginData",testName ="Авторизация с неправильными данными")
-    public void checkLoginWithNegativeValue1(String user,String password,String expectedMessage){
-        loginPage.open();
-        loginPage.login(user,password);
+    @Test (dataProvider = "LoginData",testName ="Авторизация с неправильными данными",
+            description = "Проверка авторизации с неправильными данными")
+    @Severity(SeverityLevel.MINOR)
+    @Owner("Laptev D.Y.")
+    public void checkLoginWithNegativeValue1(String username,String password,String expectedMessage){
+        user.setUsername(username);
+        user.setPassword(password);
+        loginPage.open()
+                        .login(user);
         Assert.assertEquals(loginPage.getErrorMessage(),
                 expectedMessage,
                 "Сообщение не то ");
