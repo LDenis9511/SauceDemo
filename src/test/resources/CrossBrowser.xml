@@ -13,5 +13,12 @@
                 <parameter name="browser" value="chrome"></parameter>
         </classes>
     </test> <!-- Test -->
-
+    <test name="Edge">
+        <classes>
+            <class name="tests.LoginTest"/>
+            <class name="tests.LocatorsTest"/>
+            <class name="tests.ChecoutTest"/>
+            <parameter name="browser" value="edge"></parameter>
+        </classes>
+    </test> <!-- Test -->
 </suite>
