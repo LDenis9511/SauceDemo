@@ -32,8 +32,8 @@ public class BaseTest {
     OrderStep orderStep;
     ProductStep productStep;
 
-    String user1 = System.getProperty("user");
-    String password1 = System.getProperty("password");
+    String user1 = System.getProperty("user",PropertyReader.getProperty("user"));
+    String password1 = System.getProperty("password",PropertyReader.getProperty("password"));
 
     @Parameters({"browser"})
     @BeforeMethod (description = "Настройка драйвера")
@@ -48,7 +48,10 @@ public class BaseTest {
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-infobars");
+        if (System.getProperty("user")!=null)
+        {
         options.addArguments("--headless");
+        }
         driver = new ChromeDriver(options);
     }
     else if (browser.equalsIgnoreCase("edge")){
