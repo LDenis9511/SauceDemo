@@ -17,6 +17,8 @@ public class ProductTest extends BaseTest{
             description = "Проверка отображения цены в корзине")
     @Owner("Laptev D.Y.")
     public  void checkDesigns(){
+        user.setUsername(user1);
+        user.setPassword(password1);
         loginStep.auth(user);
         productStep.addProduct(product);
         cartPage.open();

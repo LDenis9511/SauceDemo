@@ -19,7 +19,9 @@ public class ChecoutTest extends BaseTest {
     description = "Проверка оформления зкакза")
     @Owner("Laptev D.Y.")
     public  void checkDesigns(){
-      loginStep.auth(user);
+        user.setUsername(user1);
+        user.setPassword(password1);
+        loginStep.auth(user);
       orderStep.validOrder(user);
         Assert.assertEquals(checkoutPage.getCompleteHeader(),"Thank you for your order!");
     }
@@ -37,6 +39,8 @@ public class ChecoutTest extends BaseTest {
     description = "Проверка оформления заказа с неправильными данными")
     @Owner("Laptev D.Y.")
     public void checkLoginWithNegativeValue1(String firstName,String lastName,String zip,String expectedMessage){
+        user.setUsername(user1);
+        user.setPassword(password1);
         loginStep.auth(user);
         user.setFirstname(firstName);
         user.setLastname(lastName);

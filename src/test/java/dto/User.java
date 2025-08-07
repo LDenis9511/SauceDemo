@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class User {
-    @Builder.Default
-    private String username = "standard_user";
-    @Builder.Default
-    private String password = "secret_sauce";
+    private String username;
+    private String password;
     private String firstname;
     private String lastname;
     private String zip;

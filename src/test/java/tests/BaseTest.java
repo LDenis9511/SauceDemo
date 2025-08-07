@@ -32,6 +32,9 @@ public class BaseTest {
     OrderStep orderStep;
     ProductStep productStep;
 
+    String user1 = System.getProperty("user");
+    String password1 = System.getProperty("password");
+
     @Parameters({"browser"})
     @BeforeMethod (description = "Настройка драйвера")
     public void setup(@Optional("chrome") String browser){

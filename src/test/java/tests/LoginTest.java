@@ -25,6 +25,8 @@ public class LoginTest extends BaseTest{
     @Severity(SeverityLevel.BLOCKER)
     @Owner("Laptev D.Y.")
     public void checkLogin(){
+        user.setUsername(user1);
+        user.setPassword(password1);
         loginStep.auth(user);
         assertTrue(productsPage.isPageOpened(),"Не авторизовались");
     }
@@ -32,8 +34,8 @@ public class LoginTest extends BaseTest{
     @DataProvider (name =  "LoginData")
     public  Object[][] loginData(){
         return new Object[][]{
-                {"standard_user","", "Epic sadface: Password is required"},
-                {"", "secret_sauce", "Epic sadface: Username is required"},
+                {user1,"", "Epic sadface: Password is required"},
+                {"", password1, "Epic sadface: Username is required"},
                 {"test", "test", "Epic sadface: Username and password do not match any user in this service"}
         };
     }
