@@ -47,8 +47,7 @@ public class LoginTest extends BaseTest{
     public void checkLoginWithNegativeValue1(String username,String password,String expectedMessage){
         user.setUsername(username);
         user.setPassword(password);
-        loginPage.open()
-                        .login(user);
+        loginStep.auth(user);
         Assert.assertEquals(loginPage.getErrorMessage(),
                 expectedMessage,
                 "Сообщение не то ");
