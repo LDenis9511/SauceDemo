@@ -1,6 +1,10 @@
 package tests;
 
-import org.junit.jupiter.api.DisplayName;
+
+import io.qameta.allure.Link;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +17,9 @@ import java.util.*;
 
 public class LocatorsTest extends BaseTest {
 
-    @Test(testName = "Проверка локаторов")
+    @Test(testName = "Проверка локаторов",description = "Проверка локаторов")
+    @Severity(SeverityLevel.NORMAL)
+    @Owner("Laptev D.Y.")
     public void locator(){
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> chromePrefs = new HashMap<>();

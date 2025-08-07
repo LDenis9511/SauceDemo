@@ -4,26 +4,35 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.*;
+import steps.LoginStep;
+import steps.OrderStep;
+import steps.ProductStep;
 
 import java.time.Duration;
 import java.util.HashMap;
-import org.junit.jupiter.api.DisplayName;
-//@Listeners (TestListener.class)
+
+import static tests.AllureUtils.takeScreenshot;
+
 public class BaseTest {
 
     static WebDriver driver;
     static SoftAssert softAssert;
     LoginPage loginPage;
     ProductsPage productsPage;
-    BasePage basePage;
     CartPage cartPage;
     CheckoutPage checkoutPage;
+    MainPage mainPage;
+    LoginStep loginStep;
+    OrderStep orderStep;
+    ProductStep productStep;
 
     @Parameters({"browser"})
-    @BeforeMethod
+    @BeforeMethod (description = "Настройка драйвера")
     public void setup(@Optional("chrome") String browser){
     if(browser.equalsIgnoreCase("chrome")){
         ChromeOptions options = new ChromeOptions();
@@ -40,18 +49,23 @@ public class BaseTest {
     else if (browser.equalsIgnoreCase("edge")){
         driver = new EdgeDriver();
     }
-
         softAssert = new SoftAssert();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         loginPage = new LoginPage(driver);
-        productsPage = new ProductsPage(driver,softAssert);
-        basePage = new BasePage(driver);
-        cartPage = new CartPage(driver,softAssert);
+        productsPage = new ProductsPage(driver);
+        cartPage = new CartPage(driver);
         checkoutPage = new CheckoutPage(driver);
+        mainPage = new MainPage(driver);
+        loginStep = new LoginStep(driver);
+        orderStep = new OrderStep(driver);
+        productStep = new ProductStep(driver);
     }
 
-    @AfterMethod
-    public void tearDown(){
+    @AfterMethod (description = "Закрытие драйвера/Скриншот (При падении теста)")
+    public void tearDown(ITestResult result){
+        if(ITestResult.FAILURE == result.getStatus()){
+            takeScreenshot(driver);
+        }
         driver.quit();
         softAssert.assertAll();
     }
